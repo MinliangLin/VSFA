@@ -19,7 +19,7 @@ if __name__ == "__main__":
     parser = ArgumentParser(description='"Test Demo of VSFA')
     parser.add_argument('--model_path', default='models/VSFA.pt', type=str,
                         help='model path (default: models/VSFA.pt)')
-    parser.add_argument('--video_path', default='./test.mp4', type=str,
+    parser.add_argument('-i', '--video_path', default='./test.mp4', type=str,
                         help='video path (default: ./test.mp4)')
     parser.add_argument('--video_format', default='RGB', type=str,
                         help='video format: RGB or YUV420 (default: RGB)')
@@ -27,21 +27,24 @@ if __name__ == "__main__":
                         help='video width')
     parser.add_argument('--video_height', type=int, default=None,
                         help='video height')
+    parser.add_argument('-n', '--video_len', type=int, default=0,
+                        help='only first n frame')
 
     parser.add_argument('--frame_batch_size', type=int, default=32,
                         help='frame batch size for feature extraction (default: 32)')
     args = parser.parse_args()
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cpu")
+    #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     start = time.time()
 
     # data preparation
     assert args.video_format == 'YUV420' or args.video_format == 'RGB'
-    if args.video_format == 'YUV420':
+    if args.video_format == 'YUV420': # never user this
         video_data = skvideo.io.vread(args.video_path, args.video_height, args.video_width, inputdict={'-pix_fmt': 'yuvj420p'})
     else:
-        video_data = skvideo.io.vread(args.video_path)
+        video_data = skvideo.io.vread(args.video_path, num_frames=args.video_len)
 
     video_length = video_data.shape[0]
     video_channel = video_data.shape[3]
