@@ -29,12 +29,16 @@ if __name__ == "__main__":
                         help='video height')
     parser.add_argument('-n', '--video_len', type=int, default=0,
                         help='only first n frame')
+    parser.add_argument('-g', '--gpu', action="store_true")
 
     parser.add_argument('--frame_batch_size', type=int, default=32,
                         help='frame batch size for feature extraction (default: 32)')
     args = parser.parse_args()
 
-    device = torch.device("cpu")
+    if args.gpu:
+        device = torch.device("cuda")
+    else:
+        device = torch.device("cpu")
     #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     start = time.time()

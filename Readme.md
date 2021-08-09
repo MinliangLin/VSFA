@@ -9,11 +9,12 @@ VSFA code for the following papers:
 ## Get Started
 
 1. Install requirements
-2. Run `python test_demo -i video.mp4 -n 50`
+2. Run `python test.py -i video.mp4 -n 50`
 
 Currently the process is inefficiet, because
-    * We restrict the torch device to be CPU.
-    * We load all frames into memory by skvideo, which may cause OOM.
-        * Therefore we can only test on about **50 frames**.
-    * We use huge patch.
+
+  - We restrict the torch device to be CPU.
+  - We load all frames into memory by skvideo, which may cause OOM.
+    - Therefore we can only test on about **50 frames**.
+  - We use huge patch.
 
